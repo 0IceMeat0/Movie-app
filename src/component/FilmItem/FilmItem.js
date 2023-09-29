@@ -27,6 +27,7 @@ export default class FilmItem extends Component {
     });
 
     if (isRatedTab === '2') { 
+      console.log(valueStar);
       return (
         <div className="movie-list__item">
           <img className="item__photo" src={imgProps} alt=" " />
