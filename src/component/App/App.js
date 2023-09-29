@@ -36,10 +36,7 @@ export default class App extends Component {
         guestSessionId: storedGuestSessionId,
         loading: false,
       });
-    } else {
-
-      this.fetchGuestSession();
-    }
+    } 
     const storedValueStar = window.localStorage.getItem('VALUE_STAR');
   const valueStar = storedValueStar ? JSON.parse(storedValueStar) : [];
 
