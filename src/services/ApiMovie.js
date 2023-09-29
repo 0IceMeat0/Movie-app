@@ -1,6 +1,6 @@
 
 
-export class SwapiServive {
+export default class SwapiServive {
 
 
     apiBase = new URL('https://api.themoviedb.org/3/');

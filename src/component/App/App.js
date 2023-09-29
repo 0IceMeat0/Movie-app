@@ -58,14 +58,14 @@ export default class App extends Component {
         guestSessionId: storedGuestSessionId,
       });
     } else {
-      apiService.getGuestSessionId()
+      apiService.getSession()
         .then(data => {
           this.setState({
             guestSessionId: data.guest_session_id,
           });
           window.localStorage.setItem('GUEST_SESSION_ID', data.guest_session_id);
         })
-
+        
     }
     apiService.getGenres()
     .then(data =>{
