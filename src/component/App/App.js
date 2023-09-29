@@ -37,12 +37,25 @@ export default class App extends Component {
         loading: false,
       });
     } 
+  
+    // Извлеките оценки из localStorage
     const storedValueStar = window.localStorage.getItem('VALUE_STAR');
-  const valueStar = storedValueStar ? JSON.parse(storedValueStar) : [];
-
-  this.setState({
-    valueStar: valueStar
-  });
+    const valueStar = storedValueStar ? JSON.parse(storedValueStar) : [];
+  
+    this.setState({
+      valueStar: valueStar,
+    });
+  
+    // Получите оцененные фильмы и обновите ratedList
+    this.getRatedMovies(storedGuestSessionId, this.state.currentPage)
+      .then(data => {
+        this.setState({
+          ratedList: data.results,
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching rated movies:', error);
+      });
   }
   
   debouncedSearch = debounce((query, page) => {
@@ -167,22 +180,28 @@ export default class App extends Component {
     } else {
       updatedValueStar.push({ movieId, ratingValue });
     }
+  
+    // Обновите состояние и localStorage
     this.setState({ valueStar: updatedValueStar }, async () => {
       try {
-        
         window.localStorage.setItem('VALUE_STAR', JSON.stringify(updatedValueStar));
-
+  
+        const response = await this.rateMovie(movieId, this.state.guestSessionId, ratingValue);
+        console.log('Movie rated successfully:', response);
+  
+        // После успешной оценки фильма, получите оцененные фильмы и обновите ratedList
         const ratedMovies = await this.getRatedMovies(this.state.guestSessionId, this.state.currentPage);
         this.setState({
-          ratedList: ratedMovies.results, 
+          ratedList: ratedMovies.results,
         });
   
       } catch (error) {
         console.error('Error rating movie:', error);
+        // Обработайте ошибку, если необходимо
       }
     });
   }
-
+  
   
   
   render() {
@@ -196,9 +215,7 @@ export default class App extends Component {
       ratedList,
       valueStar,
       activeTab,
-      guestSessionId
     } = this.state;
-      console.log(guestSessionId);
     const hasData = todoData.length > 0;
     const content = (
       <div>
