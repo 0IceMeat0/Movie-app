@@ -248,7 +248,7 @@ export default class App extends Component {
       <section className="movieapp">
         <Offline>You're currently offline. Please check your connection.</Offline>
         <Online>
-        <Tabs defaultActiveKey="1" items={items} onChange={this.handleTabChange} />
+        <Tabs className="tabs" defaultActiveKey="1" items={items} onChange={this.handleTabChange} />
         </Online>
       </section>
     );

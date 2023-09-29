@@ -45,10 +45,13 @@ header button:hover{
 input{
   cursor: pointer;
 }
-:where(.css-dev-only-do-not-override-18iikkb).ant-tabs-top >.ant-tabs-nav, :where(.css-dev-only-do-not-override-18iikkb).ant-tabs-bottom >.ant-tabs-nav, :where(.css-dev-only-do-not-override-18iikkb).ant-tabs-top >div>.ant-tabs-nav, :where(.css-dev-only-do-not-override-18iikkb).ant-tabs-bottom >div>.ant-tabs-nav{
- margin: auto;
+.tabs{
+display: flex;
+justify-content: center;
+align-items: center;
+
 }
-:where(.css-dev-only-do-not-override-18iikkb).ant-input-affix-wrapper{
+.ant-input-affix-wrapper{
   margin: 5px;
   width: 50lvw;
 }
