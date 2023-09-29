@@ -1,0 +1,15 @@
+.movie-list__item{
+    box-shadow: 0 4px 12px rgba(0,0,0,.15);
+    display: flex;
+    height: 281px;
+    margin: 15px 0;
+}
+.movie-list{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  padding: 20px 36px;
+
+}

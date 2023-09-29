@@ -1,0 +1,70 @@
+*,
+*::before,
+*::after {
+margin: 0;
+padding: 0;
+-webkit-box-sizing: border-box;
+box-sizing: border-box;
+}
+:active, :hover, :focus {
+  outline: 0;
+  outline-offset: 0;
+}
+button,
+a,
+ul {
+margin: 0;
+padding: 0;
+border: none;
+background: none;
+position: relative;
+list-style: none;
+text-decoration: none;
+font: inherit;
+color: inherit;
+}
+:root{
+  --index: calc(1vw + 1vh);
+}
+header button:hover{
+  box-shadow: 0 0 15px 2px rgba(0, 0, 0, 0.25);
+}
+.body{
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ margin-top: 40px;
+}
+.none{
+  display: none;
+}
+.done{
+  text-decoration: line-through;
+
+}
+input{
+  cursor: pointer;
+}
+:where(.css-dev-only-do-not-override-18iikkb).ant-tabs-top >.ant-tabs-nav, :where(.css-dev-only-do-not-override-18iikkb).ant-tabs-bottom >.ant-tabs-nav, :where(.css-dev-only-do-not-override-18iikkb).ant-tabs-top >div>.ant-tabs-nav, :where(.css-dev-only-do-not-override-18iikkb).ant-tabs-bottom >div>.ant-tabs-nav{
+ margin: auto;
+}
+:where(.css-dev-only-do-not-override-18iikkb).ant-input-affix-wrapper{
+  margin: 5px;
+  width: 50lvw;
+}
+  .input{
+  display: flex;
+ 
+  justify-content: center;
+  align-items: center;
+  
+}
+.loader {
+  display: block;
+  margin: 20px auto;
+}
+.loader::before{
+  content: "loading";
+  position: relative;
+
+}

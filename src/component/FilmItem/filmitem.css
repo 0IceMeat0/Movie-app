@@ -1,0 +1,37 @@
+.item__photo{
+  width: 183px;
+  height: 281px;
+  
+}
+.item__text{
+  font-size: 13px;
+    width: 228px;
+    display: flex;
+    flex-direction: column;
+    margin: 12px 20px;
+}
+.item__title{
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 28px;
+  margin-bottom: 7px;
+  max-width: 190px;
+}
+.item__date{
+padding-bottom: 10px;
+}
+.rate{
+ display: flex;
+ position: relative;
+ right: 5px;
+}
+.genre__one{
+  background-color: #FAFAFA;
+  margin-right: 5px;
+  padding: 3px;
+  border: solid 1px #D9D9D9;
+  border-radius: 4px;
+}
+.item__genre{
+  margin-bottom: 15px;
+}
