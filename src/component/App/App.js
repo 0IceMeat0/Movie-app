@@ -195,9 +195,10 @@ export default class App extends Component {
       todoDataGenres,
       ratedList,
       valueStar,
-      activeTab
+      activeTab,
+      guestSessionId
     } = this.state;
-
+      console.log(guestSessionId);
     const hasData = todoData.length > 0;
     const content = (
       <div>
