@@ -7,8 +7,8 @@ import SerchForm from "../SearchForm/SerchForm";
 import { Spin, Tabs } from 'antd';
 import { debounce } from 'lodash';
 import { Online, Offline } from 'react-detect-offline';
-import AlertError from "../../services/AlertError";
-import axios from 'axios'
+import AlertError from "../AlertError/AlertError";
+import LocalStorageService from "../../services/LocalStorageService";
 
 export default class App extends Component {
   state = {
@@ -23,14 +23,13 @@ export default class App extends Component {
     errorMessage: 'Try to input something',
     apiService: new SwapiServive(),
     error: false,
-    apik: "c5227d06361d3bcc6179a54d714eb7a9",
     guestSessionId: '',
-    activeTab: "1",
+    activeTab: "search",
     ratedList: []
   };
 
   componentDidMount() {
-    const storedGuestSessionId = window.localStorage.getItem('GUEST_SESSION_ID');
+    const storedGuestSessionId = LocalStorageService.getItem('GUEST_SESSION_ID'); 
     if (storedGuestSessionId) {
       this.setState({
         guestSessionId: storedGuestSessionId,
@@ -38,15 +37,13 @@ export default class App extends Component {
       });
     } 
   
-    // Извлеките оценки из localStorage
-    const storedValueStar = window.localStorage.getItem('VALUE_STAR');
+    const storedValueStar = LocalStorageService.getItem('VALUE_STAR'); 
     const valueStar = storedValueStar ? JSON.parse(storedValueStar) : [];
   
     this.setState({
       valueStar: valueStar,
     });
-  
-    // Получите оцененные фильмы и обновите ratedList
+
     this.getRatedMovies(storedGuestSessionId, this.state.currentPage)
       .then(data => {
         this.setState({
@@ -64,7 +61,7 @@ export default class App extends Component {
 
   fetchMovies = (query, page) => {
     const apiService = new SwapiServive();
-    const storedGuestSessionId = window.localStorage.getItem('GUEST_SESSION_ID');
+    const storedGuestSessionId = LocalStorageService.getItem('GUEST_SESSION_ID');
 
     if (storedGuestSessionId) {
       this.setState({
@@ -76,7 +73,7 @@ export default class App extends Component {
           this.setState({
             guestSessionId: data.guest_session_id,
           });
-          window.localStorage.setItem('GUEST_SESSION_ID', data.guest_session_id);
+          LocalStorageService.setItem('GUEST_SESSION_ID', data.guest_session_id);
         })
         
     }
@@ -101,29 +98,11 @@ export default class App extends Component {
   }
 
   async rateMovie(movieId, guestSessionId, rateValue) {
-    const res = await axios.post(
-      `https://api.themoviedb.org/3/movie/${movieId}/rating`,
-      {
-        value: rateValue,
-      },
-      {
-        params: {
-          api_key: this.state.apik, 
-          guest_session_id: guestSessionId,
-        },
-      }
-    );
-  
-    return res.data;
-  }
-  async getRatedMovies(guestSessionId, currentPage) {
-  const res = await axios.get(`https://api.themoviedb.org/3/guest_session/${guestSessionId}/rated/movies`, {
-    params: {
-      api_key: this.state.apik,
-      page: currentPage,
-    },
-  });
-  return res.data;
+    return await this.state.apiService.rateMovie(movieId, guestSessionId, rateValue);
+}
+
+async getRatedMovies(guestSessionId, currentPage) {
+   return await this.state.apiService.getRatedMovies(guestSessionId, currentPage);
 }
 
   onPagination = (pageNumber) => {
@@ -156,8 +135,8 @@ export default class App extends Component {
   };
   handleTabChange = (activeKey) => {
     this.setState({ activeTab: activeKey });
-    if (activeKey === '2') { 
-      const storedValueStar = window.localStorage.getItem('VALUE_STAR');
+    if (activeKey === 'rated') { 
+      const storedValueStar = LocalStorageService.getItem('VALUE_STAR');
       const valueStar = storedValueStar ? JSON.parse(storedValueStar) : [];
       this.getRatedMovies(this.state.guestSessionId, this.state.currentPage)
         .then(data => {
@@ -180,16 +159,14 @@ export default class App extends Component {
     } else {
       updatedValueStar.push({ movieId, ratingValue });
     }
-  
-    // Обновите состояние и localStorage
+
     this.setState({ valueStar: updatedValueStar }, async () => {
       try {
-        window.localStorage.setItem('VALUE_STAR', JSON.stringify(updatedValueStar));
+        LocalStorageService.setItem('VALUE_STAR', JSON.stringify(updatedValueStar));
   
         const response = await this.rateMovie(movieId, this.state.guestSessionId, ratingValue);
         console.log('Movie rated successfully:', response);
-  
-        // После успешной оценки фильма, получите оцененные фильмы и обновите ratedList
+
         const ratedMovies = await this.getRatedMovies(this.state.guestSessionId, this.state.currentPage);
         this.setState({
           ratedList: ratedMovies.results,
@@ -197,7 +174,7 @@ export default class App extends Component {
   
       } catch (error) {
         console.error('Error rating movie:', error);
-        // Обработайте ошибку, если необходимо
+
       }
     });
   }
@@ -227,7 +204,7 @@ export default class App extends Component {
         ) : null}
         {!loading && !error ? (
           <div>
-            <FilmList activeTab={activeTab} todos={todoData}  handleChange={this.handleChange}  genres={todoDataGenres} />
+            <FilmList valueStar={valueStar} activeTab={activeTab} todos={todoData}  handleChange={this.handleChange}  genres={todoDataGenres} />
             {hasData ? (
               <Footer currentPage={this.state.currentPage} onPageChange={this.onPagination} totalMovies={this.state.totalMovies} />
             ) : null}
@@ -238,7 +215,7 @@ export default class App extends Component {
 
     const items = [
       {
-        key: '1',
+        key: 'search',
         label: 'Search',
         children: (
           <div className="container">
@@ -250,7 +227,7 @@ export default class App extends Component {
         ),
       },
       {
-        key: '2',
+        key: 'rated',
         label: 'Rated',
         children: (
           <div className="container">
@@ -266,7 +243,7 @@ export default class App extends Component {
       <section className="movieapp">
         <Offline>You're currently offline. Please check your connection.</Offline>
         <Online>
-        <Tabs className="tabs" defaultActiveKey="1" items={items} onChange={this.handleTabChange} />
+        <Tabs className="tabs" defaultActiveKey="search" items={items} onChange={this.handleTabChange} />
         </Online>
       </section>
     );

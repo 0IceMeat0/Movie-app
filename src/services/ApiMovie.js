@@ -1,4 +1,4 @@
-
+import axios from 'axios'
 
 export default class SwapiServive {
 
@@ -75,7 +75,31 @@ export default class SwapiServive {
         throw new Error('Error getting guest session: ' + error.message);
       }
     }
-
+    async rateMovie(movieId, guestSessionId, rateValue) {
+      const res = await axios.post(
+        `https://api.themoviedb.org/3/movie/${movieId}/rating`,
+        {
+          value: rateValue,
+        },
+        {
+          params: {
+            api_key: this.apiKey, 
+            guest_session_id: guestSessionId,
+          },
+        }
+      );
+    
+      return res.data;
+    }
+    async getRatedMovies(guestSessionId, currentPage) {
+    const res = await axios.get(`https://api.themoviedb.org/3/guest_session/${guestSessionId}/rated/movies`, {
+      params: {
+        api_key: this.apiKey,
+        page: currentPage,
+      },
+    });
+    return res.data;
+  }
     
     
   }

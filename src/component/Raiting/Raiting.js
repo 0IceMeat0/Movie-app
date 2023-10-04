@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import './Raiting.css';
 
-function Raiting({ vote_average }) {
-  const value = vote_average.toFixed(1);
+export default class Raiting extends Component {
+  render(){
+   const {vote_average } = this.props;
+   const value = vote_average.toFixed(1);
   let color;
   if (value < 3) {
     color = '#E90000';
@@ -19,6 +21,7 @@ function Raiting({ vote_average }) {
       <span className="average__value">{value}</span>
     </div>
   );
+  }
 }
 
 PropTypes.defaultProps = {
@@ -28,5 +31,3 @@ PropTypes.defaultProps = {
 PropTypes.propTypes = {
   vote_average: PropTypes.number,
 };
-
-export default Raiting;

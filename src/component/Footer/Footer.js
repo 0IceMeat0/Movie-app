@@ -1,24 +1,28 @@
-import React from 'react';
+import React, {Component} from 'react';
 import './footer.css';
 import { Pagination } from 'antd';
 import PropTypes from 'prop-types';
 
-function Footer({ currentPage, onPageChange, totalMovies }) {
-  const handlePageChange = (pageNumber) => {
-    onPageChange(pageNumber); 
-  };
-
-  return (
-    <Pagination
-     current={currentPage}
-     showSizeChanger={false}
-     showLessItems={false}
-      total={totalMovies}
-      className="footer"
-      onChange={handlePageChange}
-    />
-  );
-}
+export default class Footer extends Component {
+  render(){
+    const { currentPage, onPageChange, totalMovies } = this.props
+    const handlePageChange = (pageNumber) => {
+      onPageChange(pageNumber); 
+    };
+  
+    return (
+      <Pagination
+       current={currentPage}
+       showSizeChanger={false}
+       showLessItems={false}
+        total={totalMovies}
+        className="footer"
+        onChange={handlePageChange}
+      />
+    );
+  }
+  }
+   
 
 Footer.defaultProps = {
   onPageChange: () => {},
@@ -31,5 +35,3 @@ Footer.propTypes = {
   totalMovies: PropTypes.number,
   currentPage: PropTypes.number,
 };
-
-export default Footer;

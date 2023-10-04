@@ -1,8 +1,11 @@
-import React from "react";
+import React, {Component} from "react";
 import FilmItem from "../FilmItem/FilmItem.js";
 import './filmlist.css';
 
-function FilmList({ todos, genres, handleChange, valueStar, activeTab }) {
+export default class FilmList extends Component {
+
+render(){
+  const { todos, genres, handleChange, valueStar, activeTab } = this.props;
   const elements = todos.map((item) => {
     const { id } = item;
     
@@ -13,7 +16,7 @@ function FilmList({ todos, genres, handleChange, valueStar, activeTab }) {
           genres={genres}
           handleChange={handleChange}
           valueStar={valueStar}
-          isRatedTab={activeTab}
+          RatedTab={activeTab}
         />
       </li>
     );
@@ -21,5 +24,4 @@ function FilmList({ todos, genres, handleChange, valueStar, activeTab }) {
 
   return <ul className="movie-list">{elements}</ul>;
 }
-
-export default FilmList;
+}

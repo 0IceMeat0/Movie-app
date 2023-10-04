@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import './filmitem.css';
-import { cutTitle, cutDescription, dataReform } from "../../services/helpers";
+import { cutTitle, cutDescription } from "../App/helpers";
 import Raiting from "../Raiting/Raiting";
 import defaultPoster from './noimage.jpg';
 import { Rate } from 'antd'
+import { format } from 'date-fns';
 
 export default class FilmItem extends Component {
   render() {
-    const { itemProps, genres, handleChange, valueStar, isRatedTab } = this.props;
-    const moiveData = dataReform(itemProps.release_date);
+    const { itemProps, genres, handleChange, valueStar, RatedTab } = this.props;
+    const moiveData = itemProps.release_date ? format(new Date(itemProps.release_date), 'MMMM d, yyyy') : '';
     const movieTitle = cutTitle(itemProps.title);
     const movieDescription =
       itemProps.genre_ids.length > 3
@@ -26,8 +27,7 @@ export default class FilmItem extends Component {
       ) : null;
     });
 
-    if (isRatedTab === '2') { 
-      console.log(valueStar);
+    if (RatedTab === 'rated') { 
       return (
         <div className="movie-list__item">
           <img className="item__photo" src={imgProps} alt=" " />
